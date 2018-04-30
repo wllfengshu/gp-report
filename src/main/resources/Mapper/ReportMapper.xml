@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="app.wllfengshu.dao.ReportDao" >
+
+	<resultMap id="reportList" type="app.wllfengshu.entity.Report">
+        <id column="id" property="id" />
+        <result column="applicant" property="applicant" />
+        <result column="domain" property="domain" />
+        <result column="company_name" property="company_name" />
+        <result column="company_type" property="company_type" />
+        <result column="territory" property="territory" />
+        <result column="status" property="status" />
+        <result column="url" property="url" />
+        <result column="ceo" property="ceo" />
+        <result column="people_num" property="people_num" />
+    </resultMap>
+
+	<select id="getReports" resultMap="reportList" >
+		SELECT 
+			*
+		FROM 
+			t_report r
+		WHERE
+			r.call_type = #{call_type} 
+			<if test="!user_id.equals('')">AND fc.user_id=#{user_id} </if>
+			<if test="!tenant_id.equals('')">AND fc.tenant_id=#{tenant_id} </if>
+			<if test="!start_time.equals('')">AND r.start_time=#{start_time}</if>
+			<if test="!end_time.equals('')">AND r.end_time=#{end_time}</if>
+			ORDER BY r.start_time , r.end_time desc 
+			LIMIT #{pageStart} ,#{pageEnd} 
+	</select>
+
+</mapper>
