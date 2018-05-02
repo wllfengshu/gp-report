@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import app.wllfengshu.dao.ReportDao;
-import app.wllfengshu.entity.Record;
 import app.wllfengshu.entity.Report;
 import app.wllfengshu.exception.NotAcceptableException;
 import app.wllfengshu.util.AuthUtil;

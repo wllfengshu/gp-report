@@ -38,12 +38,12 @@ public class ReportRest {
     		@HeaderParam(value="tenant_id") String tenant_id,
     		@HeaderParam(value="call_type") String call_type,
     		@QueryParam("token") String token,
-    		@QueryParam("begin_time") String begin_time,@QueryParam("end_time") String end_time,
+    		@QueryParam("start_time") String start_time,@QueryParam("end_time") String end_time,
     		@QueryParam("pageNo") int pageNo,@QueryParam("pageSize") int pageSize,
     		@Context HttpServletRequest request,@Context HttpServletResponse response) {
 		String responseStr = null;
 		try{
-			responseStr=reportService.getReports(sessionId,user_id,tenant_id,call_type,token,begin_time,end_time,pageNo,pageSize);
+			responseStr=reportService.getReports(sessionId,user_id,tenant_id,call_type,token,start_time,end_time,pageNo,pageSize);
 		}catch (NotAcceptableException e) {
 			System.out.println(e);
 			return Response.serverError().entity("{\"message\":\""+e.getMessage()+"\",\"timestamp\":\""+System.currentTimeMillis()+"\"}").status(406).build();
