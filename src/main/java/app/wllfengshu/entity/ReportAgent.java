@@ -1,6 +1,6 @@
 package app.wllfengshu.entity;
 
-public class Report {
+public class ReportAgent {
 	private String totalCount;//总条数
 	private String totalTime;//总时间数
 	public String getTotalCount() {

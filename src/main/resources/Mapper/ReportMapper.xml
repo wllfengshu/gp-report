@@ -2,24 +2,122 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="app.wllfengshu.dao.ReportDao" >
 
-	<resultMap id="reportList" type="app.wllfengshu.entity.Report">
+	<resultMap id="reportAgent" type="app.wllfengshu.entity.ReportAgent">
         <result column="totalCount" property="totalCount" />
         <result column="totalTime" property="totalTime" />
     </resultMap>
 
-	<select id="getReports" resultMap="reportList" >
+	<select id="getReportsAgent" resultMap="reportAgent" >
 		SELECT 
 			count(*) as totalCount ,
-			sum(length) as totalTime
+			sum(fc.length) as totalTime
 		FROM 
 			t_fact_call fc
 		WHERE
-			fc.call_type = #{call_type} 
-			<if test="!user_id.equals('')">AND fc.user_id=#{user_id} </if>
-			<if test="!tenant_id.equals('')">AND fc.tenant_id=#{tenant_id} </if>
+			fc.call_type = #{call_type} AND 
+			fc.user_id = #{user_id} 
 			<if test="!start_time.equals('')">AND fc.start_time  &gt;  #{start_time}</if>
 			<if test="!end_time.equals('')">AND fc.end_time  &lt;  #{end_time}</if>
 			LIMIT #{pageStart} ,#{pageEnd} 
 	</select>
 
+	<select id="getReportsAgentCount" resultType="int" >
+		SELECT 
+			count(*)
+		FROM 
+			t_fact_call fc
+		WHERE
+			fc.call_type = #{call_type} AND 
+			fc.user_id = #{user_id} 
+			<if test="!start_time.equals('')">AND fc.start_time  &gt;  #{start_time}</if>
+			<if test="!end_time.equals('')">AND fc.end_time  &lt;  #{end_time}</if>
+	</select>
+
+	<resultMap id="reportTM" type="app.wllfengshu.entity.ReportTM">
+        <result column="totalCount" property="totalCount" />
+        <result column="totalTime" property="totalTime" />
+        <result column="dnis" property="dnis" />
+        <result column="user_id" property="user_id" />
+        <result column="login_name" property="login_name" />
+    </resultMap>
+
+	<select id="getReportsTM" resultMap="reportTM" >
+		SELECT 
+			fc.dnis,
+			fc.user_id,
+			u.login_name,
+			count(*) AS totalCount,
+			sum(fc.length) AS totalTime
+		FROM 
+			t_fact_call fc
+		LEFT JOIN 
+			t_user u ON fc.user_id = u.id
+		WHERE
+			fc.call_type = #{call_type} AND 
+			fc.tenant_id = #{tenant_id} 
+			<if test="!start_time.equals('')">AND fc.start_time  &gt;  #{start_time}</if>
+			<if test="!end_time.equals('')">AND fc.end_time  &lt;  #{end_time}</if>
+		GROUP BY
+			fc.user_id
+		ORDER BY
+			totalCount,	totalTime DESC
+		LIMIT #{pageStart} ,#{pageEnd} 
+	</select>
+
+	<select id="getReportsTMCount" resultType="int" >
+		SELECT 
+			count(*)
+		FROM 
+			t_fact_call fc
+		LEFT JOIN 
+			t_user u ON fc.user_id = u.id
+		WHERE
+			fc.call_type = #{call_type} AND 
+			fc.tenant_id = #{tenant_id} 
+			<if test="!start_time.equals('')">AND fc.start_time  &gt;  #{start_time}</if>
+			<if test="!end_time.equals('')">AND fc.end_time  &lt;  #{end_time}</if>
+	</select>
+
+	<resultMap id="reportManage" type="app.wllfengshu.entity.ReportManage">
+        <result column="totalCount" property="totalCount" />
+        <result column="totalTime" property="totalTime" />
+        <result column="domain" property="domain" />
+        <result column="company_name" property="company_name" />
+        <result column="tenant_id" property="tenant_id" />
+    </resultMap>
+
+	<select id="getReportsManage" resultMap="reportManage" >
+		SELECT 
+			t.domain,
+			t.company_name,
+			fc.tenant_id,
+			count(*) AS totalCount,
+			sum(length) AS totalTime
+		FROM 
+			t_fact_call fc
+		LEFT JOIN 
+			t_tenant t ON fc.tenant_id = t.id
+		WHERE
+			fc.call_type = #{call_type} 
+			<if test="!start_time.equals('')">AND fc.start_time  &gt;  #{start_time}</if>
+			<if test="!end_time.equals('')">AND fc.end_time  &lt;  #{end_time}</if>
+		GROUP BY
+			fc.tenant_id
+		ORDER BY
+			totalCount,	totalTime DESC
+		LIMIT #{pageStart} ,#{pageEnd} 
+	</select>
+
+	<select id="getReportsManageCount" resultType="int" >
+		SELECT 
+			count(*)
+		FROM 
+			t_fact_call fc
+		LEFT JOIN 
+			t_tenant t ON fc.tenant_id = t.id
+		WHERE
+			fc.call_type = #{call_type} 
+			<if test="!start_time.equals('')">AND fc.start_time  &gt;  #{start_time}</if>
+			<if test="!end_time.equals('')">AND fc.end_time  &lt;  #{end_time}</if>
+	</select>
 </mapper>
