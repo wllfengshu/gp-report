@@ -66,7 +66,7 @@
 
 	<select id="getReportsTMCount" resultType="int" >
 		SELECT 
-			count(*)
+			distinct  count(*)
 		FROM 
 			t_fact_call fc
 		LEFT JOIN 
