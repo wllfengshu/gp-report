@@ -56,7 +56,7 @@ public class ReportServiceImpl implements ReportService {
 		}else if (token.equals("manage")) {//使用manage系统的用户，查询数据库中所有数据
 			recordsManage = reportDao.getReportsManage(call_type, start_time, end_time, (pageNo-1)*pageSize, pageSize);
 			responseMap.put("data", recordsManage);
-			responseMap.put("count", 4);
+			responseMap.put("count", 2);
 //			responseMap.put("count", reportDao.getReportsManageCount(call_type, start_time, end_time));
 		}else{//其他token直接返回失败
 			throw new NotAcceptableException("凭证异常");
